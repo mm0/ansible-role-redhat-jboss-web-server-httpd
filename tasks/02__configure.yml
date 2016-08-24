@@ -19,5 +19,5 @@
     group: "{{ jws_apache.group }}"
     src: mod_cluster.conf.j2
     dest: "{{ jws_apache.home }}/conf.d/mod_cluster.conf"
-    mode: 644
+    mode: "0644"
   notify: Restart JWS Apache

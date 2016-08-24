@@ -26,7 +26,7 @@
     group: "{{ item.group }}"
     src: .bashrc.j2
     dest: "{{ item.user_home }}/.bashrc"
-    mode: "644"
+    mode: "0644"
   with_items:
     - "{{ jws_apache }}"
 
@@ -41,4 +41,3 @@
   with_items:
    - apr-util-devel
    - apr-devel
-

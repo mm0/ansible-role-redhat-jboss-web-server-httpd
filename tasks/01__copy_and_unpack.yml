@@ -18,11 +18,11 @@
 
 - name: (01) Updating owners
   become: true
-  file: path={{item.user_home}}/jws-3.0 owner={{item.user}} group={{item.group}}
+  file: path={{ item.user_home }}/jws-3.0 owner={{ item.user }} group={{ item.group }}
   with_items:
-    - "{{jws_apache}}"
+    - "{{ jws_apache }}"
 
 - name: (01) Postinstall
   when: jws_zip.changed
   become: yes
-  command: bash -c "cd {{jws_apache.home}} && ./.postinstall"
+  command: bash -c "cd {{ jws_apache.home }} && ./.postinstall"
