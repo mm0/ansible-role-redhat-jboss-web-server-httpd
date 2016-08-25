@@ -8,7 +8,7 @@ galaxy_info:
   - name: EL
     versions:
     - 7
-  categories:
+  galaxy_tags:
   - cloud
   - development
   - packaging
@@ -21,4 +21,6 @@ galaxy_info:
 allow_duplicates: no
 
 dependencies:
-    - { role: rh-jboss-common }
+  - role: Maarc.rh-jboss-common
+    src: Maarc.rh-jboss-common
+    name: rh-jboss-common
