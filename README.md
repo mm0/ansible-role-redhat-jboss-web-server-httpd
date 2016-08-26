@@ -22,9 +22,20 @@ Role Variables
 Dependencies
 ------------
 
-The "rh-jboss-common" role is required. It could be imported as follows:
+The "Maarc.rh-jboss-common" role is required. It could be imported as follows:
+
+    ansible-galaxy install Maarc.rh-jboss-common -p roles
+
+or
 
     ansible-galaxy install -r requirements.yml -p roles
+
+
+Installation
+------------
+
+    ansible-galaxy install Maarc.rh-jboss-web-server-httpd -p roles
+
 
 
 Example Playbook
@@ -32,7 +43,7 @@ Example Playbook
 
     - hosts: "dev-jws-group"
       roles:
-        - {role: "rh-jboss-web-server-httpd"}
+        - {role: "Maarc.rh-jboss-web-server-httpd"}
 
 
 License
