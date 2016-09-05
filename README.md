@@ -1,4 +1,4 @@
-Ansible role: "Red Hat JBoss Web Server - HTTPD" [![Build Status](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-web-server-httpd.svg?branch=master)](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-web-server-httpd)
+Ansible role: "Red Hat JBoss Web Server - HTTPD" [![Build Status](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-web-server-httpd.svg?branch=master)](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-web-server-httpd) [![Galaxy](https://img.shields.io/badge/galaxy-maarc.rh--jboss--web--server--httpd-blue.svg?style=flat)](https://galaxy.ansible.com/Maarc/rh-jboss-web-server-httpd)
 =================================
 
 Description
