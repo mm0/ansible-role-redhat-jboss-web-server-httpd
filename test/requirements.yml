@@ -2,4 +2,4 @@
 
 - src: chrismeyersfsu.provision_docker
 
-- src: Maarc.rh-jboss-common
+- src: mm0.rh-jboss-common

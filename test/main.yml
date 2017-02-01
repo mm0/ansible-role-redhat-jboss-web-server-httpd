@@ -16,4 +16,4 @@
   vars_files:
     - vars.yml
   roles:
-    - role: Maarc.rh-jboss-web-server-httpd
+    - role: mm0.rh-jboss-web-server-httpd
