@@ -1,0 +1,25 @@
+---
+
+- name: (05) Generate JWS Apache systemd unit file
+  template:
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    src: jboss-jws-rhel.service.j2
+    dest: "/etc/systemd/system/{{ jboss_jws_instance_service_name }}.service"
+    mode: "0755"
+  register: systemd_service_file
+
+# Reloading systemd. Should be executed here and not as a handler.
+- name: (05) Reload systemd
+  when: systemd_service_file.changed == true
+  command: systemctl daemon-reload
+
+- name: "{{ jboss_jws_instance_name }} (05) Run Postinstall"
+  become: yes
+  command: bash -c "cd {{ jboss_jws_instance_dir }} && ./.postinstall"
+
+- name: "{{ jboss_jws_instance_name }} (05) Ensure JBoss EAP is running"
+  service:
+    name: "{{ jboss_jws_instance_service_name }}"
+    state: started
+    enabled: yes

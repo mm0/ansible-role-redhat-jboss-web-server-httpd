@@ -1,6 +1,34 @@
 ---
 
-- name: "(00) Create groups for JWS"
+- name: (00) Check "download_dir" variable
+  fail: msg="This role requires 'download_dir' to be set and non empty."
+  when: download_dir is not defined or download_dir == ''
+
+- name: (00) Check "jboss_jws_instance_name" variable
+  fail: msg="This role requires 'jboss_eap_instance_name' to be set and non empty."
+  when: jboss_jws_instance_name is not defined or jboss_jws_instance_name == ''
+
+- name: (00) Check "jboss_jws_golden_image_name" variable
+  fail: msg="This role requires 'jboss_jws_golden_image_name' to be set and non empty."
+  when: jboss_jws_golden_image_name is not defined or jboss_jws_golden_image_name == ''
+
+- name: (00) Check "cli_dir" variable
+  fail: msg="This role requires 'cli_dir' to be set and non empty as it defines some CLI files in 'cli_list'"
+  when: cli_list.0 is defined and (cli_dir is not defined or cli_dir == '')
+
+- name: (00) Check "app_dir" variable
+  fail: msg="This role requires 'app_dir' to be set and non empty as it defines some applications in 'app_list'"
+  when: app_list.0 is defined and (app_dir is not defined or app_dir == '')
+
+- name: (00) Check "bin_dir" variable
+  fail: msg="This role requires 'bin_dir' to be set and non empty."
+  when: bin_dir is not defined or bin_dir == ''
+
+- name: (00) Check "gi_dir" variable
+  fail: msg="This role requires 'gi_dir' to be set and non empty."
+  when: gi_dir is not defined or gi_dir == ''
+
+- name: "{{ jboss_jws_instance_name }} ((00) Create groups for JWS"
   group:
     name: "{{ item.group }}"
     system: yes
@@ -9,7 +37,7 @@
   with_items:
     - "{{ jws_apache }}"
 
-- name: "(00) Create users for JWS"
+- name: "{{ jboss_jws_instance_name }} (00) Create users for JWS"
   user:
     name: "{{ item.user }}"
     comment: "{{ item.user }} user"

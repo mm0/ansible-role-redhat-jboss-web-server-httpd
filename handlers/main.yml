@@ -3,6 +3,6 @@
   when: jws_apache_start.changed == false
   become: true
   service:
-    name: "{{ jws_apache.service }}"
+    name: "{{ jboss_jws_instance_service_name.service }}"
     state: restarted
     enabled: yes

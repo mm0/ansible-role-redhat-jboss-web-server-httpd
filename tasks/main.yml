@@ -10,19 +10,20 @@
 - include: 01__copy_and_unpack.yml
 
 #### Configure JWS
-- include: 02__configure.yml
+- include: 02__configure.yml info="(02)" target_dir="{{ jboss_jws_check_dir }}"
   become: true
+  register: clone
+
+#### Gracefully stop and remove the current instance.
+- include: 03__graceful_removal.yml
+  become: true
+  when: is_modified
+
+#### Create a new instance from scratch.
+- include: 02__configure.yml info="(04)" target_dir="{{ jboss_jws_instance_dir }}"
+  become: true
+  when: is_modified
 
 #### Create Service Account
-- include: 03__register_service.yml
+- include: 05__register_service.yml
   become: true
-
-#### Start JWS
-- name: (99) Ensure JWS Apache is running
-  become: true
-  service:
-    name: "{{ jws_apache.service }}"
-    state: started
-    enabled: yes
-  register: jws_apache_start
-

@@ -1,0 +1,19 @@
+[Unit]
+Description=Red Hat JWS Apache HTTPD
+After=syslog.target network.target
+
+[Service]
+Type=forking
+WorkingDirectory={{ jboss_jws_instance_dir }}/sbin
+Environment="LD_LIBRARY_PATH={{ jboss_jws_instance_dir }}/lib"
+
+ExecStart={{ jboss_jws_instance_dir }}/sbin/apachectl start
+ExecStop={{ jboss_jws_instance_dir }}/sbin/apachectl stop
+
+User=root
+Group=root
+#User={{ jws_apache.user }}
+#Group={{ jws_apache.group }}
+
+[Install]
+WantedBy=multi-user.target
