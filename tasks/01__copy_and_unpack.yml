@@ -4,6 +4,7 @@
   stat:
     path: "{{ jboss_jws_home + '/LICENSE.txt'}}"
   register: jboss_jws_exists
+  become: yes
 
 - name: "{{ jboss_jws_instance_name }} (01) Copy zipped JBoss Web Server HTTPD installation"
   copy:
@@ -12,6 +13,7 @@
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
   register: copy_zip_state
+  become: yes
 
 #check for target extraction directory
 - name: "{{ jboss_jws_instance_name }} (01) Ensures JWS user directory exists"
@@ -28,6 +30,7 @@
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
   register: distribution
+  become: yes
 
 - name: "{{ jboss_jws_instance_name }} (01) Updating owners"
   become: true

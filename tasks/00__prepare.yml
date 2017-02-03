@@ -33,7 +33,6 @@
     name: "{{ item.group }}"
     system: yes
     state: present
-    gid: "{{ item.group_id }}"
   with_items:
     - "{{ jws_apache }}"
 
@@ -41,7 +40,6 @@
   user:
     name: "{{ item.user }}"
     comment: "{{ item.user }} user"
-    uid: "{{ item.group_id }}"
     group: "{{ item.group }}"
     home: "{{ item.user_home }}"
     shell: "/bin/sh"
