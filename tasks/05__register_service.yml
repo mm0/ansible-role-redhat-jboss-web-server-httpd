@@ -14,9 +14,9 @@
   when: systemd_service_file.changed == true
   command: systemctl daemon-reload
 
-- name: "{{ jboss_jws_instance_name }} (05) Run Postinstall"
-  become: yes
-  command: bash -c "cd {{ jboss_jws_instance_dir }} && ./.postinstall"
+#- name: "{{ jboss_jws_instance_name }} (05) Run Postinstall"
+#  become: yes
+#  command: bash -c "cd {{ jboss_jws_check_dir }} && ./.postinstall"
 
 - name: "{{ jboss_jws_instance_name }} (05) Ensure JBoss EAP is running"
   service:

@@ -18,6 +18,11 @@
 #check for target extraction directory
 - name: "{{ jboss_jws_instance_name }} (01) Ensures JWS user directory exists"
   file: path={{jws_apache.user_home}} state=directory
+  become: yes
+
+- name: "{{ jboss_jws_instance_name }} (01) Ensures JWS user instance directory exists"
+  file: path={{ jboss_jws_instance_dir }} state=directory
+  become: yes
 
 - name: "{{ jboss_jws_instance_name }} (01) Extract JBoss Web Server HTTPD"
   # new version or no installation so far
@@ -33,7 +38,8 @@
   become: yes
 
 - name: "{{ jboss_jws_instance_name }} (01) Updating owners"
-  become: true
-  file: path={{ item.user_home }}/jws-3.0 owner={{ item.user }} group={{ item.group }}
+  become: yes
+  file: path={{ item }} owner={{ jws_apache.user }} group={{ jws_apache.group }}
   with_items:
-    - "{{ jws_apache }}"
+    - "{{ jws_apache.user_home }}/jws-3.0"
+    - "{{ jboss_jws_instance_dir }}"

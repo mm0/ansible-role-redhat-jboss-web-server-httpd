@@ -4,7 +4,8 @@
   template:
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
-    src: apache.service.j2
+#    src: apache.service.j2
+    src: jboss-jws-rhel.service.j2
     dest: "/etc/systemd/system/{{ jws_apache.service }}.service"
     mode: "0755"
   register: systemd_service_file

@@ -7,8 +7,8 @@ Type=forking
 WorkingDirectory={{ jboss_jws_instance_dir }}/sbin
 Environment="LD_LIBRARY_PATH={{ jboss_jws_instance_dir }}/lib"
 
-ExecStart={{ jboss_jws_instance_dir }}/sbin/apachectl start
-ExecStop={{ jboss_jws_instance_dir }}/sbin/apachectl stop
+ExecStart={{ jboss_jws_instance_dir }}/sbin/apachectl start -f {{ jboss_jws_instance_dir }}/conf/httpd.conf
+ExecStop={{ jboss_jws_instance_dir }}/sbin/apachectl stop -f {{ jboss_jws_instance_dir }}/conf/httpd.conf
 
 User=root
 Group=root

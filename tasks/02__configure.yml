@@ -33,6 +33,10 @@
     - { regexp: '^User (.*)$', line: "User {{ jws_apache.user }}"}
     - { regexp: '^Group (.*)$', line: "Group {{ jws_apache.group }}"}
     - { regexp: '^DocumentRoot(.*)$', line: "#DocumentRoot\\1"}
+    - { regexp: '(.*)/var/www(.*)$', line: "\\1{{ jboss_jws_instance_dir }}/var/www\\2"}
+    - { regexp: '^PidFile(.*)$', line: "PidFile {{ jboss_jws_instance_dir }}/run/httpd.pid"}
+    - { regexp: '^ServerRoot(.*)$', line: "ServerRoot {{ jboss_jws_instance_dir }}"}
+
   register: conf_02
 
 - name: "{{ jboss_jws_instance_name }} {{ info }} Configure SSL"
@@ -43,6 +47,9 @@
     backrefs: yes
   with_items:
     - { regexp: '^Listen (.*)$', line: "Listen {{ jboss_jws_bind_ip_address }}:{{ jboss_jws_instance_ssl_port }}"}
+    - { regexp: '.*SSLPassPhraseDialog(.*)$', line: "SSLPassPhraseDialog exec:{{ jboss_jws_instance_dir }}/sbin/httpd-ssl-pass-dialog"}
+    - { regexp: '.*SSLSessionCache(.*)$', line: "SSLSessionCache shmcb:{{ jboss_jws_instance_dir }}/run/sslcache(512000)"}
+    - { regexp: '^<Directory "/var/www/httpd24/cgi-bin">(.*)$', line: "<Directory \"{{ jboss_jws_instance_dir }}/www/cgi-bin\">"}
   register: conf_03
 
 - name: "{{ jboss_jws_instance_name }} {{ info }} Create configuration file"
@@ -54,14 +61,28 @@
     mode: "0644"
   register: conf_04
 
-- name: "{{ jboss_jws_instance_name }} {{ info }} Generate service systemd unit file"
-  template:
-    owner: "{{ jws_apache.user }}"
-    group: "{{ jws_apache.group }}"
-    src: jboss-jws-rhel.service.j2
-    dest: "{{ target_dir }}/service/{{ jboss_jws_instance_service_name }}.service"
-    mode: "0750"
+- name: "{{ jboss_jws_instance_name }} {{ info }} Configure Base"
+  lineinfile:
+    dest: "{{target_dir}}/conf.modules.d/00-base.conf"
+    regexp: "{{item.regexp}}"
+    line: "{{item.line}}"
+    backrefs: no
+    insertbefore: BOF
+    create: no
+    state: present
+  with_items:
+    - { regexp: '^DefaultRuntimeDir (.*)$', line: "DefaultRuntimeDir {{ jboss_jws_instance_dir }}/run"}
   register: conf_05
+
+
+#- name: "{{ jboss_jws_instance_name }} {{ info }} Generate service systemd unit file"
+#  template:
+#    owner: "{{ jws_apache.user }}"
+#    group: "{{ jws_apache.group }}"
+#    src: jboss-jws-rhel.service.j2
+#    dest: "{{ target_dir }}/service/{{ jboss_jws_instance_service_name }}.service"
+#    mode: "0750"
+#  register: conf_06
 
 - name: "{{ jboss_jws_instance_name }} {{ info }} Set is_modified"
   set_fact:
