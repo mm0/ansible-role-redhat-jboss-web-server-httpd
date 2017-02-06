@@ -37,13 +37,13 @@ script:
   - sudo ansible all -i "127.0.0.1," -m lineinfile -a "regexp=^#host_key_checking dest=/etc/ansible/ansible.cfg line='host_key_checking = False'" -c local
 
   # Syntax check
-  - ansible-playbook -i test/inventory test/test.yml --syntax-check
+  - ansible-playbook -i test/inventory test/main.yml --syntax-check
 
   # List tasks
-  - ansible-playbook -i test/inventory test/test.yml --list-tasks
+  - ansible-playbook -i test/inventory test/main.yml --list-tasks
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i test/inventory test/test.yml
+#  - ansible-playbook -i test/inventory test/test.yml
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   #- >
