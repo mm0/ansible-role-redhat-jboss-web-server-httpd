@@ -1,5 +1,7 @@
-Ansible role: "Red Hat JBoss Web Server - HTTPD" [![Build Status](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-web-server-httpd.svg?branch=master)](https://travis-ci.org/Maarc/ansible-role-redhat-jboss-web-server-httpd) [![Galaxy](https://img.shields.io/badge/galaxy-maarc.rh--jboss--web--server--httpd-blue.svg?style=flat)](https://galaxy.ansible.com/Maarc/rh-jboss-web-server-httpd)
-=================================
+mm0.rh-jboss-web-server-httpd
+=======
+
+[![Build Status](https://travis-ci.org/mm0/ansible-role-redhat-jboss-web-server-httpd.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-redhat-jboss-web-server-httpd) [![Galaxy](https://img.shields.io/badge/galaxy-mm0.rh--jboss--web--server--httpd-blue.svg?style=flat)](https://galaxy.ansible.com/Maarc/rh-jboss-web-server-httpd)
 
 Description
 -----------
@@ -22,9 +24,9 @@ Role Variables
 Dependencies
 ------------
 
-The "Maarc.rh-jboss-common" role is required. It could be imported as follows:
+The "mm0.rh-jboss-common" role is required. It could be imported as follows:
 
-    ansible-galaxy install Maarc.rh-jboss-common -p roles
+    ansible-galaxy install mm0.rh-jboss-common -p roles
 
 or
 
@@ -34,7 +36,7 @@ or
 Installation
 ------------
 
-    ansible-galaxy install Maarc.rh-jboss-web-server-httpd -p roles
+    ansible-galaxy install mm0.rh-jboss-web-server-httpd -p roles
 
 
 
@@ -43,7 +45,7 @@ Example Playbook
 
     - hosts: "dev-jws-group"
       roles:
-        - {role: "Maarc.rh-jboss-web-server-httpd"}
+        - {role: "mm0.rh-jboss-web-server-httpd"}
 
 
 License
