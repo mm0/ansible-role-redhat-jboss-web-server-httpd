@@ -1,7 +1,7 @@
 mm0.rh-jboss-web-server-httpd
 =======
 
-[![Build Status](https://travis-ci.org/mm0/ansible-role-redhat-jboss-web-server-httpd.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-redhat-jboss-web-server-httpd) [![Galaxy](https://img.shields.io/badge/galaxy-mm0.rh--jboss--web--server--httpd-blue.svg?style=flat)](https://galaxy.ansible.com/Maarc/rh-jboss-web-server-httpd)
+[![Build Status](https://travis-ci.org/mm0/ansible-role-redhat-jboss-web-server-httpd.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-redhat-jboss-web-server-httpd) [![Galaxy](https://img.shields.io/badge/galaxy-mm0.rh--jboss--web--server--httpd-blue.svg?style=flat)](https://galaxy.ansible.com/mm0/rh-jboss-web-server-httpd)
 
 Description
 -----------
