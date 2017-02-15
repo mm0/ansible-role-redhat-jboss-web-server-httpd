@@ -3,20 +3,24 @@
 # Installation following: https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Web_Server/3/html/Installation_Guide/sect-ZIP_Installation.html
 
 #### Create user
-- include: 00__prepare.yml
+- include: 00__prereqs.yml
+  become: true
+
+#### Gracefully stop and remove the current instance.
+- include: 01__graceful_removal.yml
   become: true
 
 #### Copy binaries
-- include: 01__copy_and_unpack.yml
-
-#### Gracefully stop and remove the current instance.
-- include: 03__graceful_removal.yml
+- include: 02__copy_and_unpack.yml
   become: true
 
 #### Create a new instance from scratch.
-- include: 02__configure.yml
+- include: 03__configure.yml
   become: true
 
 #### Create Service Account
-- include: 05__register_service.yml
+- include: 04__register_service.yml
   become: true
+
+- name: debug
+  debug: var="{{ vars }}"
