@@ -1,25 +1,28 @@
 ---
 
-- name: "{{ jboss_jws_instance_name }} (03) Check existence of the service script"
+- name: "Check existence of the service script"
   stat:
-    path: "{{ jboss_jws_instance_dir }}/service/{{ jboss_jws_instance_name }}.service"
-  register: jboss_jws_rhel_svc
+    path: "/etc/systemd/system/{{ jboss_jws_instance_name }}.service"
 
-- name: "{{ jboss_jws_instance_name }} (03) Stop JBoss JWS"
-  when: jboss_jws_rhel_svc.stat.exists
+- name: "Stop JBoss JWS"
   ignore_errors: yes
   service:
     name: "{{ jboss_jws_instance_service_name }}"
     state: stopped
     enabled: no
 
-- name: "{{ jboss_jws_instance_name }} (03) Reload systemd"
+- name: "Reload systemd"
   command: systemctl daemon-reload
 
-- name: "{{ jboss_jws_instance_name }} (03) Remove all instance-specific files"
+- name: "Remove working dir"
+  shell: rm -rf "{{ jboss_jws_instance_dir }}"
+  become: yes
+
+
+- name: "Remove all instance-specific files"
   file:
     name: "{{ item }}"
     state: absent
+  become: yes
   with_items:
-    - "{{ jboss_jws_instance_dir }}"
     - /etc/systemd/system/{{ jboss_jws_instance_service_name }}.service

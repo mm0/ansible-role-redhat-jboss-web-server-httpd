@@ -1,89 +1,60 @@
 ---
 
-- name: "{{ jboss_jws_instance_name }} {{ info }} Check existence of the target dir ({{ target_dir }})"
-  stat:
-    path: "{{ target_dir }}"
-  register: conf_00
+- name: "Step 5. Generate httpd.conf"
+  template:
+    src: httpd.conf.j2
+    dest: "{{jws_apache.user_home }}/jws-3.0/httpd/conf/httpd.conf"
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+  become: true
 
-#Initial creation of instance clone
-- block:
+- name: "Step 6. Generate ssl.conf"
+  template:
+    src: ssl.conf.j2
+    dest: "{{jws_apache.user_home }}/jws-3.0/httpd/conf.d/ssl.conf"
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+  become: true
 
-  - name: "{{ jboss_jws_instance_name }} {{ info }} Copy the JBoss JWS directory "
-    shell: "cp -Rfp {{ jboss_jws_home }}/httpd {{ target_dir }}; chown {{ jws_apache.user }}:{{ jws_apache.group }} -R {{ target_dir }}"
-    register: conf_01
-
-  - name: "{{ jboss_jws_instance_name }} {{ info }} Create the service directory"
-    file:
-      path: "{{ target_dir }}/service"
-      owner: "{{ jws_apache.user }}"
-      group: "{{ jws_apache.group }}"
-      state: directory
-      mode: "0750"
-
-  when: conf_00.stat.isdir is undefined or conf_00.stat.isdir == False
-
-- name: "{{ jboss_jws_instance_name }} {{ info }} Configure httpd"
-  lineinfile:
-    dest: "{{target_dir}}/conf/httpd.conf"
-    regexp: "{{item.regexp}}"
-    line: "{{item.line}}"
-    backrefs: yes
-  with_items:
-    - { regexp: '^Listen (.*)$', line: "Listen {{ jboss_jws_bind_ip_address }}:{{ jboss_jws_instance_port }}"}
-    - { regexp: '^User (.*)$', line: "User {{ jws_apache.user }}"}
-    - { regexp: '^Group (.*)$', line: "Group {{ jws_apache.group }}"}
-    - { regexp: '^DocumentRoot(.*)$', line: "#DocumentRoot\\1"}
-    - { regexp: '(.*)/var/www(.*)$', line: "\\1{{ jboss_jws_instance_dir }}/var/www\\2"}
-    - { regexp: '^PidFile(.*)$', line: "PidFile {{ jboss_jws_instance_dir }}/run/httpd.pid"}
-    - { regexp: '^ServerRoot(.*)$', line: "ServerRoot {{ jboss_jws_instance_dir }}"}
-
-  register: conf_02
-
-- name: "{{ jboss_jws_instance_name }} {{ info }} Configure SSL"
-  lineinfile:
-    dest: "{{target_dir}}/conf.d/ssl.conf"
-    regexp: "{{item.regexp}}"
-    line: "{{item.line}}"
-    backrefs: yes
-  with_items:
-    - { regexp: '^Listen (.*)$', line: "Listen {{ jboss_jws_bind_ip_address }}:{{ jboss_jws_instance_ssl_port }}"}
-    - { regexp: '.*SSLPassPhraseDialog(.*)$', line: "SSLPassPhraseDialog exec:{{ jboss_jws_instance_dir }}/sbin/httpd-ssl-pass-dialog"}
-    - { regexp: '.*SSLSessionCache(.*)$', line: "SSLSessionCache shmcb:{{ jboss_jws_instance_dir }}/run/sslcache(512000)"}
-    - { regexp: '^<Directory "/var/www/httpd24/cgi-bin">(.*)$', line: "<Directory \"{{ jboss_jws_instance_dir }}/www/cgi-bin\">"}
-  register: conf_03
-
-- name: "{{ jboss_jws_instance_name }} {{ info }} Create configuration file"
+- name: "Step 7. Create mod_cluster configuration file"
   template:
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
     src: mod_cluster.conf.j2
-    dest: "{{ target_dir }}/conf.d/mod_cluster.conf"
+    dest: "{{jws_apache.user_home }}/jws-3.0/httpd/conf.d/mod_cluster.conf"
     mode: "0644"
-  register: conf_04
 
-- name: "{{ jboss_jws_instance_name }} {{ info }} Configure Base"
-  lineinfile:
-    dest: "{{target_dir}}/conf.modules.d/00-base.conf"
-    regexp: "{{item.regexp}}"
-    line: "{{item.line}}"
-    backrefs: no
-    insertbefore: BOF
-    create: no
-    state: present
-  with_items:
-    - { regexp: '^DefaultRuntimeDir (.*)$', line: "DefaultRuntimeDir {{ jboss_jws_instance_dir }}/run"}
-  register: conf_05
+- name: "STEP 8. Create the service directory"
+  file:
+    path: "{{jws_apache.user_home }}/jws-3.0/httpd/service"
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    state: directory
+    mode: "0750"
 
+- name: "STEP 9. Generate service systemd unit file"
+  template:
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    src: jboss-jws-rhel.service.j2
+    dest: "{{jws_apache.user_home }}/jws-3.0/httpd/service/{{ jboss_jws_instance_service_name }}.service"
+    mode: "0750"
 
-#- name: "{{ jboss_jws_instance_name }} {{ info }} Generate service systemd unit file"
-#  template:
-#    owner: "{{ jws_apache.user }}"
-#    group: "{{ jws_apache.group }}"
-#    src: jboss-jws-rhel.service.j2
-#    dest: "{{ target_dir }}/service/{{ jboss_jws_instance_service_name }}.service"
-#    mode: "0750"
-#  register: conf_06
+- name: "Step 10. Move configured installation into place"
+  shell: "mv {{jws_apache.user_home }}/jws-3.0/httpd {{ jboss_jws_instance_dir }}"
+  become_user: "{{ jws_apache.user }}"
+  become: yes
 
-- name: "{{ jboss_jws_instance_name }} {{ info }} Set is_modified"
-  set_fact:
-    is_modified: "{{ distribution.changed or conf_01.changed or conf_02.changed or conf_03.changed or conf_04.changed or conf_05.changed}}"
+- name: "Step 11. Generate JWS Apache systemd unit file"
+  template:
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    src: jboss-jws-rhel.service.j2
+    dest: "/etc/systemd/system/{{ jws_apache.service }}_{{ jboss_jws_instance_name }}.service"
+    mode: "0755"
+  register: systemd_service_file
+
+- name: "Step 12. Reload systemd"
+  when: systemd_service_file.changed == true
+  command: systemctl daemon-reload
+  notify: Restart JWS Apache

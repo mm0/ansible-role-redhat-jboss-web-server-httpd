@@ -9,20 +9,13 @@
 #### Copy binaries
 - include: 01__copy_and_unpack.yml
 
-#### Configure JWS
-- include: 02__configure.yml info="(02)" target_dir="{{ jboss_jws_check_dir }}"
-  become: true
-  register: clone
-
 #### Gracefully stop and remove the current instance.
 - include: 03__graceful_removal.yml
   become: true
-  when: is_modified
 
 #### Create a new instance from scratch.
-- include: 02__configure.yml info="(04)" target_dir="{{ jboss_jws_instance_dir }}"
+- include: 02__configure.yml
   become: true
-  when: is_modified
 
 #### Create Service Account
 - include: 05__register_service.yml

@@ -1,45 +1,37 @@
 ---
 
-- name: "{{ jboss_jws_instance_name }} (01) Check existence of the JBoss JWS installation"
+- name: "Step 1. Check existence of the JBoss JWS installation"
   stat:
-    path: "{{ jboss_jws_home + '/LICENSE.txt'}}"
+    path: "{{ jws_httpd_zip_artifact_dl_dst  }}"
   register: jboss_jws_exists
   become: yes
 
-- name: "{{ jboss_jws_instance_name }} (01) Copy zipped JBoss Web Server HTTPD installation"
-  copy:
-    src: "{{ jws_httpd_zip_artifact_dl_src }}"
-    dest: "{{ jws_httpd_zip_artifact_dl_dst }}"
-    owner: "{{ jws_apache.user }}"
-    group: "{{ jws_apache.group }}"
-  register: copy_zip_state
-  become: yes
 
 #check for target extraction directory
-- name: "{{ jboss_jws_instance_name }} (01) Ensures JWS user directory exists"
-  file: path={{jws_apache.user_home}} state=directory
+- name: "Step 2. Ensures JWS user directory exists"
+  file: path={{ item }} state=directory owner="{{ jws_apache.user }}" group="{{ jws_apache.group }}"
   become: yes
+  with_items:
+  - "{{ jws_apache.user_home }}"
+  - "{{ jboss_jws_instance_dir }}"
 
-- name: "{{ jboss_jws_instance_name }} (01) Ensures JWS user instance directory exists"
-  file: path={{ jboss_jws_instance_dir }} state=directory
-  become: yes
-
-- name: "{{ jboss_jws_instance_name }} (01) Extract JBoss Web Server HTTPD"
-  # new version or no installation so far
-  when: jboss_jws_exists.stat.exists == false or copy_zip_state.changed == true
+- name: "Step 3. Extract JBoss Web Server HTTPD"
   unarchive:
     src: "{{ jws_httpd_zip_artifact_dl_dst }}"
     dest: "{{ jws_apache.user_home }}"
     copy: false
-    # creates: "{{ jws_apache.home }}"
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
   register: distribution
   become: yes
 
-- name: "{{ jboss_jws_instance_name }} (01) Updating owners"
+- name: "Step 4. Updating owners"
   become: yes
   file: path={{ item }} owner={{ jws_apache.user }} group={{ jws_apache.group }}
   with_items:
     - "{{ jws_apache.user_home }}/jws-3.0"
     - "{{ jboss_jws_instance_dir }}"
+
+#- name: "Step 5. Run Postinstall"
+#  become: yes
+#  command: bash -c "cd "{{ jws_apache.user_home }}/jws-3.0/httpd" && ./.postinstall"
