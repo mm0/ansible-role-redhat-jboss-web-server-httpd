@@ -1,0 +1,66 @@
+---
+- name: "Step 0. Create /etc/mime.types"
+  file:
+    name: /etc/mime.types
+    state: touch
+  become: yes
+
+- name: "Step 1a. Create groups for App"
+  group:
+    name: "{{ item.group }}"
+    system: yes
+    state: present
+  with_items:
+  - "{{ jws_apache }}"
+  become: yes
+
+- name: "Step 1b. Create users for App"
+  user:
+    name: "{{ item.user }}"
+    comment: "{{ item.user }} user"
+    group: "{{ item.group }}"
+    home: "{{ item.user_home }}"
+    shell: "/bin/bash"
+  become: yes
+  with_items:
+  - "{{ jws_apache }}"
+
+- name: "Step 2. Install JDK 1.8 And dependencies"
+  become: true
+  yum: name="{{ item }}" state=present
+  with_items:
+  - unzip
+  - "{{ java_pkg_name }}"
+  - apr-util-devel
+  - apr-devel
+
+- name: "Step 3. Update .bash_profile"
+  template:
+    src: .bash_profile.j2
+    dest: "{{ item.user_home }}/.bash_profile"
+    owner: "{{ item.user }}"
+    group: "{{ item.group }}"
+  register: bashrc_uploaded
+  become: true
+  with_items:
+  - "{{ jws_apache }}"
+
+- name: "STEP 4. Check zip file exists"
+  stat:
+    path: "{{ jboss_jws_golden_image_dir }}/{{ jws_httpd_zip_artifact_name }}.zip"
+  register: jboss_eap_exists
+
+- name: Fail when package unavailable
+  fail: "msg='Install archive not found path: {{ jboss_jws_golden_image_dir }}/{{ jws_httpd_zip_artifact_name }}.zip'"
+  when: jboss_eap_exists.stat.exists == False
+
+
+- name: Set user limits
+  pam_limits:
+    domain: "{{ item.domain }}"
+    limit_type: "{{ item.type }}"
+    limit_item: "{{ item.item }}"
+    value: "{{ item.value }}"
+    use_max: yes
+  with_items: "{{ user_limits }}"
+  become: yes

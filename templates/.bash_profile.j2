@@ -1,0 +1,13 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+export JAVA_HOME={{ jboss_java_home }}
+PATH=$PATH:$HOME/.local/bin:$HOME/bin:{{ jboss_java_home }}/bin
+
+export PATH

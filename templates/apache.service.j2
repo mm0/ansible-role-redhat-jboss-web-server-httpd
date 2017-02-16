@@ -12,8 +12,6 @@ ExecStop={{ jws_apache.home }}/sbin/apachectl stop -f {{ jboss_jws_instance_dir 
 
 User=root
 Group=root
-#User={{ jws_apache.user }}
-#Group={{ jws_apache.group }}
 
 [Install]
 WantedBy=multi-user.target

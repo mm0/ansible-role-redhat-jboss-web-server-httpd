@@ -1,0 +1,34 @@
+---
+
+- name: "Step 5. Check existence of the JBoss JWS installation"
+  stat:
+    path: "{{ jws_httpd_zip_artifact_dl_dst  }}"
+  register: jboss_jws_exists
+  become: yes
+
+
+#check for target extraction directory
+- name: "Step 6. Ensures JWS user directory exists"
+  file: path={{ item }} state=directory owner="{{ jws_apache.user }}" group="{{ jws_apache.group }}"
+  become: yes
+  with_items:
+  - "{{ jws_apache.user_home }}"
+  - "{{ jboss_jws_instance_dir }}"
+
+- name: "Step 7. Extract JBoss Web Server HTTPD"
+  unarchive:
+    src: "{{ jws_httpd_zip_artifact_dl_dst }}"
+    dest: "{{ jws_apache.user_home }}"
+    copy: false
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+  register: distribution
+  become: yes
+
+- name: "Step 8. Updating owners"
+  become: yes
+  file: path={{ item }} owner={{ jws_apache.user }} group={{ jws_apache.group }}
+  with_items:
+    - "{{ jws_apache.user_home }}/jws-3.0"
+    - "{{ jboss_jws_instance_dir }}"
+
