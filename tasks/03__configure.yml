@@ -65,6 +65,7 @@
     permissions: '{{ item.permissions }}'
     default: true
     recursive: true
+  become: yes
   with_items:
   - type: user
     permissions: rw-

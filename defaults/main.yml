@@ -29,8 +29,7 @@ jboss_httpd_ssl_engine_on: "Off"
 jws_apache:
   user: jws_apache
   group: jws_apache
-  user_home: "/opt/jws_apache"
-  home: "/opt/jws_apache/jws-3.0/httpd"
+  user_home: "/jws_apache"
   service: "jws_apache"
 
 # Used for Allowing connections to mod_cluster-manager
@@ -49,10 +48,10 @@ jws_httpd_zip_artifact_name: "jws-httpd-3.0.3-RHEL7-x86_64"
 jws_httpd_zip_artifact_dl_dst: "{{ jboss_jws_golden_image_dir }}/{{ jws_httpd_zip_artifact_name }}.zip"
 
 # Directory containing the unpacked golden image.
-jboss_jws_home: "{{ jws_apache.user_home }}/jws-{{jboss_jws_version}}"
+jboss_jws_home: "{{ jws_apache.user_home }}/{{ jboss_jws_instance_name }}/jws-{{jboss_jws_version}}"
 
 # Directory for the target running instance
-jboss_jws_instance_dir: "{{ jws_apache.user_home }}/jws_apache_{{ jboss_jws_instance_name }}"
+jboss_jws_instance_dir: "{{ jws_apache.user_home }}/{{ jboss_jws_instance_name }}"
 
 # JBoss EAP service name
 jboss_jws_instance_service_name: "jws_apache_{{ jboss_jws_instance_name }}"
