@@ -55,3 +55,20 @@
     dest: "/etc/systemd/system/{{ jws_apache.service }}_{{ jboss_jws_instance_name }}.service"
     mode: "0755"
   register: systemd_service_file
+
+
+- name: "Step 19. Update ACL"
+  acl:
+    name: "{{jws_apache.user_home }}/jws-3.0/httpd/"
+    etype: "{{ item.type }}"
+    state: present
+    permissions: '{{ item.permissions }}'
+    default: true
+    recursive: true
+  with_items:
+  - type: user
+    permissions: rw-
+  - type: group
+    permissions: r--
+  - type: other
+    permissions: r--
