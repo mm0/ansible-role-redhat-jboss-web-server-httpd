@@ -1,16 +1,4 @@
 ---
-- name: "Step 15. Move configured installation into place"
-  shell: "mv {{jws_apache.user_home }}/jws-3.0/httpd/* {{ jboss_jws_instance_dir }}"
-  become_user: "{{ jws_apache.user }}"
-  become: yes
-
 - name: "Step 16. Reload systemd"
-  when: systemd_service_file.changed == true
   command: systemctl daemon-reload
   notify: Restart JWS Apache
-
-- name: "Final Step: Ensure JBoss EAP is running"
-  service:
-    name: "{{ jboss_jws_instance_service_name }}"
-    state: started
-    enabled: yes

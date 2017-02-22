@@ -9,6 +9,7 @@
 #### Gracefully stop and remove the current instance.
 - include: 01__graceful_removal.yml
   become: true
+  when: jws_apache_force_remove|bool
 
 #### Copy binaries
 - include: 02__copy_and_unpack.yml

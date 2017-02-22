@@ -1,8 +1,12 @@
 ---
 - name: "Step 0. Create /etc/mime.types"
-  file:
-    name: /etc/mime.types
-    state: touch
+  copy:
+    content: ""
+    dest: /etc/mime.types
+    force: no
+    group: root
+    owner: root
+    mode: 0555
   become: yes
 
 - name: "Step 1a. Create groups for App"

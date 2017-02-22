@@ -18,7 +18,7 @@
 - name: "Step 7. Extract JBoss Web Server HTTPD"
   unarchive:
     src: "{{ jws_httpd_zip_artifact_dl_dst }}"
-    dest: "{{ jws_apache.user_home }}"
+    dest: "{{ jboss_jws_instance_dir }}"
     copy: false
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
@@ -29,6 +29,5 @@
   become: yes
   file: path={{ item }} owner={{ jws_apache.user }} group={{ jws_apache.group }}
   with_items:
-    - "{{ jws_apache.user_home }}/jws-3.0"
     - "{{ jboss_jws_instance_dir }}"
 

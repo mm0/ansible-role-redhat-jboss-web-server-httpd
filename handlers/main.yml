@@ -2,6 +2,6 @@
 - name: Restart JWS Apache
   become: true
   service:
-    name: "{{ jws_apache.service }}_{{ jboss_jws_instance_name }}"
+    name: "{{ jboss_jws_instance_service_name }}"
     state: restarted
     enabled: yes

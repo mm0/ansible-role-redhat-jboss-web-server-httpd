@@ -86,7 +86,6 @@ Example Playbook
   - jws_server_name: az.yb.com
   roles:
     - {role: "mm0.rh-jboss-web-server-httpd",
-        jboss_jws_golden_image_name: "{{ golden_image_name }}",
       jboss_jws_version: "{{ jws_version }}",
       jboss_jws_instance_name: "{{ instance.name }}",
       jboss_jws_instance_standalone_file: "{{ instance.standalone_file }}",

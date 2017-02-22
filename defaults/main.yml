@@ -2,6 +2,9 @@
 # Directory for zips
 jboss_jws_golden_image_dir: "/mnt/nfs/ansible/redhat/rh_jboss_binaries/"
 
+# Force remove current environment installation
+jws_apache_force_remove: false
+
 # JDK Installed via yum
 java_pkg_name: java-1.8.0-openjdk-devel
 
