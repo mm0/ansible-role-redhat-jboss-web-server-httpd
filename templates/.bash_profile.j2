@@ -7,7 +7,7 @@ fi
 
 # User specific environment and startup programs
 
-export JAVA_HOME={{ jboss_java_home }}
-PATH=$PATH:$HOME/.local/bin:$HOME/bin:{{ jboss_java_home }}/bin
+export JAVA_HOME={{ jws_apache.user_home }}/java/{{ jboss_java_sdk_dir }}
+PATH=$PATH:$HOME/.local/bin:$HOME/bin:{{ jws_apache.user_home }}/java/{{ jboss_java_sdk_dir }}/bin
 
 export PATH

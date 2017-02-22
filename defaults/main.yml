@@ -7,6 +7,7 @@ jws_apache_force_remove: false
 
 # JDK Installed via yum
 java_pkg_name: java-1.8.0-openjdk-devel
+jboss_java_sdk_dir: jdk1.8.0_92
 
 # Default JAVA_HOME
 jboss_java_home: "/usr/lib/jvm/java-1.8.0-openjdk"
@@ -23,7 +24,6 @@ jboss_jws_mod_cluster_port_offset: 0
 jboss_jws_instance_default_port: 9000
 jboss_jws_instance_ssl_default_port: 9001
 jboss_jws_mod_cluster_default_port: 6666
-jboss_jws_instance_default_port: 83
 
 # system user configuration defaults
 jws_apache:

@@ -68,3 +68,22 @@
     use_max: yes
   with_items: "{{ user_limits }}"
   become: yes
+
+- name: "Create java directory"
+  file:
+    path: "{{ item }}"
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    state: directory
+    mode: "0750"
+  with_items:
+  - "{{ jws_apache.user_home }}/java"
+
+- name: "Create JDK Symlink"
+  become: true
+  file:
+    state: link
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    src: "{{ jboss_java_home }}"
+    dest: "{{ jws_apache.user_home }}/java/{{ jboss_java_sdk_dir }}"
