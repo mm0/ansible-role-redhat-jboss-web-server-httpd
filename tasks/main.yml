@@ -22,6 +22,6 @@
 #### Create Service Account
 - include: 04__register_service.yml
   become: true
-
-- name: debug
-  debug: var=hostvars[inventory_hostname]
+#
+#- name: debug
+#  debug: var=hostvars[inventory_hostname]
