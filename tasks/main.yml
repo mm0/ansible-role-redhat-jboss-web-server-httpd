@@ -24,4 +24,4 @@
   become: true
 
 - name: debug
-  debug: var="{{ vars }}"
+  debug: var=hostvars[inventory_hostname]

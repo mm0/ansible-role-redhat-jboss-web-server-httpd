@@ -27,10 +27,10 @@ jboss_jws_instance_default_port: 83
 
 # system user configuration defaults
 jws_apache:
-  user: jws_apache
-  group: jws_apache
-  user_home: "/jws_apache"
-  service: "jws_apache"
+  user: jbossweb
+  group: jbosssweb
+  user_home: "/jboss-web"
+  service: "jboss_web"
 
 # Used for Allowing connections to mod_cluster-manager
 jws_required_ips:
