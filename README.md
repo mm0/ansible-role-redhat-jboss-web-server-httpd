@@ -8,11 +8,32 @@ Description
 
 Please have a look at [this example](https://github.com/Maarc/ansible_middleware_soe) showing how to easily operate Red Hat JBoss middleware products using this role.
 
+The final installation will be found in the `httpd` subdirectory of the `jboss_jws_home` directory
 
 Requirements
 ------------
 
 This role has been tested on Ansible 2.0.2.0 and 2.1.1.0. It requires Red Hat Enterprise Linux 7.
+
+The following files must be present on server:
+
+| Ansible Variable(s)  | Default Value       | Description          |
+|-------------------|---------------------|----------------------|
+| `jboss_jws_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_binaries/` | Directory of zip |
+| `jws_httpd_zip_artifact_name` | `jws-httpd-3.0.3-RHEL7-x86_64` | Base name of zip file (without .zip extension) |
+
+Customize installation with the following variables:
+
+| Name              | Default Value       | Description          |
+|-------------------|---------------------|----------------------|
+| `jboss_jws_instance_name` | `Default` | Environment name for deployment|
+| `jboss_jws_instance_port_offset`, `jboss_jws_instance_ssl_port_offset`, `jboss_jws_mod_cluster_port_offset` | `0` | Port offset |
+| `jboss_jws_bind_ip_address` | `0.0.0.0` | Interface to bind to |
+| `jws_server_admin` | `test@test.com` | Email of Admin for Apache|
+| `jws_server_name` | `website.com` | Hostname |
+| `jws_required_ips` | `["127.0.0.1", "10.0.0.0/8" ]` | [List] IP Ranges to whitelist for mod_cluster mod_cluster-manager |
+
+
 
 
 Role Variables
@@ -66,6 +87,7 @@ Installation
 
     ansible-galaxy install mm0.rh-jboss-web-server-httpd -p roles
 
+Is it recommended to add this role to your project's `requirements.yml` file and use ansible-galaxy
 
 Example Playbook
 ----------------
