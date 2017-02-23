@@ -12,6 +12,9 @@ jboss_java_sdk_dir: jdk1.8.0_92
 # Default JAVA_HOME
 jboss_java_home: "/usr/lib/jvm/java-1.8.0-openjdk"
 
+# Default JWS Version
+jboss_jws_version: 3.0
+
 # Name of the separate running Red Hat JBoss JWS instance
 jboss_jws_instance_name: default
 
@@ -28,9 +31,8 @@ jboss_jws_mod_cluster_default_port: 6666
 # system user configuration defaults
 jws_apache:
   user: jbossweb
-  group: jbosssweb
+  group: jbossweb
   user_home: "/jboss-web"
-  service: "jboss_web"
 
 # Used for Allowing connections to mod_cluster-manager
 jws_required_ips:
@@ -54,7 +56,7 @@ jboss_jws_home: "{{ jws_apache.user_home }}/{{ jboss_jws_instance_name }}/jws-{{
 jboss_jws_instance_dir: "{{ jws_apache.user_home }}/{{ jboss_jws_instance_name }}"
 
 # JBoss EAP service name
-jboss_jws_instance_service_name: "jws_apache_{{ jboss_jws_instance_name }}"
+jboss_jws_instance_service_name: "jboss_web_{{ jboss_jws_instance_name }}"
 
 # Offset the port
 jboss_jws_instance_port: "{{ jboss_jws_instance_default_port|int + jboss_jws_instance_port_offset|int }}"

@@ -22,7 +22,6 @@
     copy: false
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
-  register: distribution
   become: yes
 
 - name: "Step 8. Updating owners"

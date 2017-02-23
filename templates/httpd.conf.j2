@@ -53,13 +53,13 @@ ServerTokens OS
 #
 # Do NOT add a slash at the end of the directory path.
 #
-ServerRoot {{ jboss_jws_instance_dir }}
+ServerRoot {{ jboss_jws_home }}/httpd/
 
 #
 # PidFile: The file in which the server should record its process
 # identification number when it starts.
 #
-PidFile {{ jboss_jws_instance_dir }}/run/httpd.pid
+PidFile {{ jboss_jws_home }}/httpd/run/httpd.pid
 
 #
 # Timeout: The number of seconds before receives and sends time out.
@@ -691,7 +691,7 @@ Alias /error/ "/var/www/error/"
 
 <IfModule mod_negotiation.c>
 <IfModule mod_include.c>
-    <Directory "/opt/jws_apache/jws_apache_dev1/var/www/error">
+    <Directory "{{ jboss_jws_home }}/httpd/var/www/error">
         AllowOverride None
         Options IncludesNoExec
         AddOutputFilter Includes html
@@ -836,7 +836,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 #    CustomLog logs/dummy-host.example.com-access_log common
 #</VirtualHost>
 
-DefaultRuntimeDir {{ jboss_jws_instance_dir }}/run
+DefaultRuntimeDir {{ jboss_jws_home }}/httpd/run
 
     #
 # Load config files from the config directory "/etc/httpd/conf.d".

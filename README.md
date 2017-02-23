@@ -25,7 +25,6 @@ Role Variables
 |-------------------|---------------------|----------------------|
 | `jboss_jws_golden_image_dir` | `/mnt/nfs/ansible/redhat/rh_jboss_binaries` | Directory location of golden image zip |
 | `jboss_jws_instance_name` | `default` |  Name of the separate running Red Hat JBoss JWS instance |
-| `jboss_eap_bind_ip_address_management` | `"0.0.0.0"` | JBoss EAP IP Address to bind to for management |
 | `java_pkg_name` | `java-1.8.0-openjdk-devel` | Used java version: Java 8 JDK.  |
 | `jboss_java_home` | `/usr/lib/jvm/java-1.8.0-openjdk` | Default JAVA_HOME |
 | `user_limits` | `See Defaults/main.yml` | Default User Limits |
@@ -74,26 +73,15 @@ Example Playbook
 ```yaml
 - hosts: "dev-jws-group"
   vars:
-  - golden_image_name: "jws-httpd-3.0.3-RHEL7-x86_64"
-  - jws_version: "3.0"
-  - instance:
-      name: "dev4"
-      port_offset: 30
-      ssl_port_offset: 30
-      mod_cluster_port_offset: 30
-  - ip_address: "{{ ansible_ens160.ipv4.address }}"
+  - jboss_jws_instance_name: "dev4"
+  - jboss_jws_instance_port_offset: "30"
+  - jboss_jws_instance_ssl_port_offset: "30"
+  - jboss_jws_mod_cluster_port_offset: "30",
+  - jboss_jws_bind_ip_address: "{{ ansible_ens160.ipv4.address }}"
   - jws_server_admin: email@email.com
   - jws_server_name: az.yb.com
   roles:
-    - {role: "mm0.rh-jboss-web-server-httpd",
-      jboss_jws_version: "{{ jws_version }}",
-      jboss_jws_instance_name: "{{ instance.name }}",
-      jboss_jws_instance_standalone_file: "{{ instance.standalone_file }}",
-      jboss_jws_instance_port_offset: "{{ instance.port_offset }}",
-      jboss_jws_instance_ssl_port_offset: "{{ instance.ssl_port_offset }}",
-      jboss_jws_mod_cluster_port_offset: "{{ instance.mod_cluster_port_offset }}",
-      jboss_jws_bind_ip_address: "{{ ip_address }}"
-    }
+    - {role: "mm0.rh-jboss-web-server-httpd"}
 ```
 
 License

@@ -4,7 +4,7 @@ LoadModule cluster_slotmem_module modules/mod_cluster_slotmem.so
 LoadModule manager_module modules/mod_manager.so
 LoadModule advertise_module modules/mod_advertise.so
 
-MemManagerFile {{jboss_jws_instance_dir}}/cache/mod_cluster
+MemManagerFile {{ jboss_jws_home }}/httpd/cache/mod_cluster
 
 <IfModule manager_module>
   Listen {{jboss_jws_mod_cluster_port}}

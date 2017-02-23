@@ -58,7 +58,6 @@
   fail: "msg='Install archive not found path: {{ jboss_jws_golden_image_dir }}/{{ jws_httpd_zip_artifact_name }}.zip'"
   when: jboss_eap_exists.stat.exists == False
 
-
 - name: Set user limits
   pam_limits:
     domain: "{{ item.domain }}"

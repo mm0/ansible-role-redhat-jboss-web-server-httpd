@@ -3,14 +3,14 @@
 - name: "Step 9. Generate httpd.conf"
   template:
     src: httpd.conf.j2
-    dest: "{{ jboss_jws_instance_dir }}/jws-3.0/httpd/conf/httpd.conf"
+    dest: "{{ jboss_jws_home }}/httpd/conf/httpd.conf"
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
   become: true
 
 - name: "Step 10. Remove ssl.conf"
   file:
-    dest: "{{jboss_jws_instance_dir }}/jws-3.0/httpd/conf.d/ssl.conf"
+    dest: "{{ jboss_jws_home }}/httpd/conf.d/ssl.conf"
     state: absent
   become: true
 
@@ -19,12 +19,12 @@
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
     src: mod_cluster.conf.j2
-    dest: "{{jboss_jws_instance_dir }}/jws-3.0/httpd/conf.d/mod_cluster.conf"
+    dest: "{{ jboss_jws_home }}/httpd/conf.d/mod_cluster.conf"
     mode: "0644"
 
 - name: "STEP 12. Create the service directory"
   file:
-    path: "{{jboss_jws_instance_dir }}/jws-3.0/httpd/service"
+    path: "{{ jboss_jws_home }}/httpd/service"
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
     state: directory
@@ -35,16 +35,16 @@
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
     src: jboss-jws-rhel.service.j2
-    dest: "{{jboss_jws_instance_dir }}/jws-3.0/httpd/service/{{ jboss_jws_instance_service_name }}.service"
+    dest: "{{ jboss_jws_home }}/httpd/service/{{ jboss_jws_instance_service_name }}.service"
     mode: "0750"
 
 - name: "Step 13b. set full path to httpd"
   lineinfile:
     regexp: "^HTTPD=.*"
-    line: "HTTPD={{ jboss_jws_instance_dir }}/sbin/httpd"
+    line: "HTTPD={{ jboss_jws_home }}/httpd/sbin/httpd"
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
-    dest: "{{jboss_jws_instance_dir }}/jws-3.0/httpd/sbin/apachectl"
+    dest: "{{jboss_jws_home }}/httpd/sbin/apachectl"
   become: yes
 
 - name: "Step 14. Generate JWS Apache systemd unit file"
@@ -52,13 +52,13 @@
     owner: "{{ jws_apache.user }}"
     group: "{{ jws_apache.group }}"
     src: jboss-jws-rhel.service.j2
-    dest: "/etc/systemd/system/{{ jws_apache.service }}_{{ jboss_jws_instance_name }}.service"
+    dest: "/etc/systemd/system/{{ jboss_jws_instance_service_name }}.service"
     mode: "0755"
   register: systemd_service_file
 
 - name: "Step 19. Update ACL"
   acl:
-    name: "{{jboss_jws_instance_dir }}/jws-3.0/httpd/"
+    name: "{{ jboss_jws_home }}/httpd/"
     etype: "{{ item.type }}"
     state: present
     permissions: '{{ item.permissions }}'
