@@ -2,3 +2,5 @@
 - name: "Step 16. Reload systemd"
   command: systemctl daemon-reload
   notify: Restart JWS Apache
+  tags:
+  - start_jws

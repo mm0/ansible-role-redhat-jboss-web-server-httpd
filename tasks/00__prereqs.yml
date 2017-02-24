@@ -1,4 +1,18 @@
 ---
+- name: "Check required directories and files exist"
+  stat: path="{{ item }}"
+  register: initial_file_check
+  with_items:
+  - "{{ jboss_jws_golden_image_dir }}"
+  - "{{ jboss_jws_golden_image_dir }}/{{ jws_httpd_zip_artifact_name }}.zip"
+  become: yes
+
+- name: "Fail when required directories do not exist"
+  fail:
+    msg: "Required Installation File or Directory is missing: {{ item.item }}"
+  when: "{{ item.stat.exists | bool}} == false"
+  with_items: "{{ initial_file_check.results }}"
+
 - name: "Step 0. Create /etc/mime.types"
   copy:
     content: ""
@@ -49,15 +63,6 @@
   with_items:
   - "{{ jws_apache }}"
 
-- name: "STEP 4. Check zip file exists"
-  stat:
-    path: "{{ jboss_jws_golden_image_dir }}/{{ jws_httpd_zip_artifact_name }}.zip"
-  register: jboss_eap_exists
-
-- name: Fail when package unavailable
-  fail: "msg='Install archive not found path: {{ jboss_jws_golden_image_dir }}/{{ jws_httpd_zip_artifact_name }}.zip'"
-  when: jboss_eap_exists.stat.exists == False
-
 - name: Set user limits
   pam_limits:
     domain: "{{ item.domain }}"
@@ -86,3 +91,9 @@
     group: "{{ jws_apache.group }}"
     src: "{{ jboss_java_home }}"
     dest: "{{ jws_apache.user_home }}/java/{{ jboss_java_sdk_dir }}"
+
+- name: "Helper for stop tag"
+  set_fact:
+    jws_apache_force_remove: True
+  tags:
+  - stop_jws

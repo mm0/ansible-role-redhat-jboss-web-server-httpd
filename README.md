@@ -106,6 +106,18 @@ Example Playbook
     - {role: "mm0.rh-jboss-web-server-httpd"}
 ```
 
+Tags
+----
+##### Stopping JWS Service
+```bash
+ansible-playbook deploy-jboss-httpd.yml -e 'target=rh72'  -t stop_jws
+```
+##### (Re)starting JWS Service
+```bash
+ansible-playbook deploy-jboss-httpd.yml -e 'target=rh72'  -t start_jws
+```
+
+
 License
 -------
 
