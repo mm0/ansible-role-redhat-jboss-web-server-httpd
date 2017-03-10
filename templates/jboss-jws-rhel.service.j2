@@ -1,14 +1,13 @@
 [Unit]
 Description=Red Hat JWS Apache HTTPD
-After=syslog.target network.target
+After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
 WorkingDirectory={{ jboss_jws_home }}/httpd/sbin
-Environment="LD_LIBRARY_PATH={{ jboss_jws_home }}/httpd/lib"
 
-ExecStart={{ jboss_jws_home }}/httpd/sbin/apachectl start -f {{ jboss_jws_home }}/httpd/conf/httpd.conf
-ExecStop={{ jboss_jws_home }}/httpd/sbin/apachectl stop -f {{ jboss_jws_home }}/httpd/conf/httpd.conf
+ExecStart={{ jboss_jws_home }}/httpd/sbin/apachectl start
+ExecStop={{ jboss_jws_home }}/httpd/sbin/apachectl stop
 
 
 User=root

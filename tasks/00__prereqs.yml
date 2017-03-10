@@ -13,16 +13,6 @@
   when: "{{ item.stat.exists | bool}} == false"
   with_items: "{{ initial_file_check.results }}"
 
-- name: "Step 0. Create /etc/mime.types"
-  copy:
-    content: ""
-    dest: /etc/mime.types
-    force: no
-    group: root
-    owner: root
-    mode: 0555
-  become: yes
-
 - name: "Step 1a. Create groups for App"
   group:
     name: "{{ item.group }}"
@@ -43,6 +33,16 @@
   with_items:
   - "{{ jws_apache }}"
 
+# As specified in: https://access.redhat.com/solutions/977573
+- name: "Step 2a. Enable 'optional' yum repo for installation of apr-util-ldap"
+  yum:
+    enablerepo: "{{ item.repo }}"
+    name: "{{ item.package }}"
+  become: yes
+  with_items:
+  - repo: rhel-7-server-optional-rpms
+    package: apr-util-ldap
+
 - name: "Step 2. Install JDK 1.8 And dependencies"
   become: true
   yum: name="{{ item }}" state=present
@@ -51,6 +51,13 @@
   - "{{ java_pkg_name }}"
   - apr-util-devel
   - apr-devel
+  - mailcap # according to https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Web_Server/3/html-single/Installation_Guide/index.html#proc-Running_the_Post-Installation_Script-Linux_ZIP used for /etc/mime.types
+  - apr
+  - apr-devel
+  - apr-util
+  - apr-util-ldap  # according to https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Web_Server/3/html-single/Installation_Guide/index.html#proc-Running_the_Post-Installation_Script-Linux_ZIP
+  - elinks
+  - krb5-workstation # according to https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Web_Server/3/html-single/Installation_Guide/index.html#proc-Running_the_Post-Installation_Script-Linux_ZIP
 
 - name: "Step 3. Update .bash_profile"
   template:

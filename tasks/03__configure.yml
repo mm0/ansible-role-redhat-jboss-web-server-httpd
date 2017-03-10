@@ -47,6 +47,33 @@
     dest: "{{jboss_jws_home }}/httpd/sbin/apachectl"
   become: yes
 
+- name: "Step 13c. set JWS_HOME variable"
+  lineinfile:
+    insertafter: "^HTTPD=.*"
+    line: "export JWS_HOME={{ jboss_jws_home }}/httpd/sbin/httpd"
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    dest: "{{jboss_jws_home }}/httpd/sbin/apachectl"
+  become: yes
+
+- name: "Step 13d. set LD_LIBRARY_PATH variable"
+  lineinfile:
+    insertafter: "^HTTPD=.*"
+    line: "export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:{{ jboss_jws_home }}/httpd/lib\""
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    dest: "{{jboss_jws_home }}/httpd/sbin/apachectl"
+  become: yes
+
+- name: "Step 13e. set LD_LIBRARY_PATH variable"
+  lineinfile:
+    insertafter: "^HTTPD=.*"
+    line: "export OPTIONS=\"-f {{ jboss_jws_home }}/httpd/conf/httpd.conf -E {{ jboss_jws_home }}/httpd/logs/httpd.log -d {{ jboss_jws_home }}\""
+    owner: "{{ jws_apache.user }}"
+    group: "{{ jws_apache.group }}"
+    dest: "{{jboss_jws_home }}/httpd/sbin/apachectl"
+  become: yes
+
 - name: "Step 14. Generate JWS Apache systemd unit file"
   template:
     owner: "{{ jws_apache.user }}"
